@@ -6,6 +6,7 @@ import { Line } from 'react-chartjs-2';
 import { getClubs, getShafts, simulateVirtualHit } from '../services/mockApi';
 import LoadingSpinner from '../components/LoadingSpinner';
 import ProgressIndicator from '../components/ProgressIndicator';
+import usePageTitle from '../hooks/usePageTitle';
 
 const Container = styled.div`
   max-width: 1200px;
@@ -220,6 +221,8 @@ const VsDivider = styled.div`
 `;
 
 function VirtualHitPage() {
+  usePageTitle('バーチャル試打');
+  
   const navigate = useNavigate();
   const location = useLocation();
   const [analysisData, setAnalysisData] = useState(null);

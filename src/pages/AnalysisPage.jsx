@@ -16,6 +16,7 @@ import {
 } from 'chart.js';
 import { Line, Bar, Radar } from 'react-chartjs-2';
 import ProgressIndicator from '../components/ProgressIndicator';
+import usePageTitle from '../hooks/usePageTitle';
 
 ChartJS.register(
   CategoryScale,
@@ -172,6 +173,8 @@ const RecommendationValue = styled.div`
 `;
 
 function AnalysisPage() {
+  usePageTitle('スイング分析結果');
+  
   const navigate = useNavigate();
   const location = useLocation();
   const [analysisData, setAnalysisData] = useState(null);

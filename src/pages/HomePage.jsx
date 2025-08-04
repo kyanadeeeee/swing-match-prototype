@@ -5,6 +5,7 @@ import { motion } from 'framer-motion';
 import { getAnalysisHistory } from '../services/mockApi';
 import LoadingSpinner from '../components/LoadingSpinner';
 import ProgressIndicator from '../components/ProgressIndicator';
+import usePageTitle from '../hooks/usePageTitle';
 
 const Container = styled.div`
   max-width: 800px;
@@ -119,6 +120,8 @@ const EmptyState = styled.div`
 `;
 
 function HomePage() {
+  usePageTitle('ホーム');
+  
   const navigate = useNavigate();
   const [analysisHistory, setAnalysisHistory] = useState([]);
   const [loading, setLoading] = useState(true);

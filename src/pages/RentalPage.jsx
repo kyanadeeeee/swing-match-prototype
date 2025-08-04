@@ -5,6 +5,7 @@ import { motion } from 'framer-motion';
 import { getClubs, getShafts } from '../services/mockApi';
 import LoadingSpinner from '../components/LoadingSpinner';
 import ProgressIndicator from '../components/ProgressIndicator';
+import usePageTitle from '../hooks/usePageTitle';
 
 const Container = styled.div`
   max-width: 1000px;
@@ -221,6 +222,8 @@ const SuccessText = styled.p`
 `;
 
 function RentalPage() {
+  usePageTitle('クラブレンタル申し込み');
+  
   const navigate = useNavigate();
   const location = useLocation();
   const [analysisData, setAnalysisData] = useState(null);

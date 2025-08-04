@@ -5,6 +5,7 @@ import { motion } from 'framer-motion';
 import { analyzeSwing } from '../services/mockApi';
 import LoadingSpinner from '../components/LoadingSpinner';
 import ProgressIndicator from '../components/ProgressIndicator';
+import usePageTitle from '../hooks/usePageTitle';
 
 const Container = styled.div`
   max-width: 800px;
@@ -160,6 +161,8 @@ const BackButton = styled(motion.button)`
 `;
 
 function CameraPage() {
+  usePageTitle('スイング動画撮影');
+  
   const navigate = useNavigate();
   const [selectedVideo, setSelectedVideo] = useState(null);
   const [videoPreview, setVideoPreview] = useState(null);
