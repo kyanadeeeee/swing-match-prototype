@@ -4,6 +4,7 @@ import { useNavigate, useLocation } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { getClubs, getShafts } from '../services/mockApi';
 import LoadingSpinner from '../components/LoadingSpinner';
+import ProgressIndicator from '../components/ProgressIndicator';
 
 const Container = styled.div`
   max-width: 1000px;
@@ -369,6 +370,8 @@ function RentalPage() {
 
   return (
     <Container>
+      <ProgressIndicator currentStep={5} completedSteps={[1, 2, 3, 4]} />
+      
       <Header>
         <PageTitle>🚚 クラブレンタル申し込み</PageTitle>
         <BackButton

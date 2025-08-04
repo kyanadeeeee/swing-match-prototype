@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { analyzeSwing } from '../services/mockApi';
 import LoadingSpinner from '../components/LoadingSpinner';
+import ProgressIndicator from '../components/ProgressIndicator';
 
 const Container = styled.div`
   max-width: 800px;
@@ -234,6 +235,8 @@ function CameraPage() {
 
   return (
     <Container>
+      <ProgressIndicator currentStep={2} completedSteps={[1]} />
+      
       <BackButton
         whileHover={{ scale: 1.02 }}
         whileTap={{ scale: 0.98 }}

@@ -15,6 +15,7 @@ import {
   RadialLinearScale,
 } from 'chart.js';
 import { Line, Bar, Radar } from 'react-chartjs-2';
+import ProgressIndicator from '../components/ProgressIndicator';
 
 ChartJS.register(
   CategoryScale,
@@ -265,6 +266,8 @@ function AnalysisPage() {
 
   return (
     <Container>
+      <ProgressIndicator currentStep={3} completedSteps={[1, 2]} />
+      
       <Header>
         <PageTitle>🎯 スイング分析結果</PageTitle>
         <ActionButtons>

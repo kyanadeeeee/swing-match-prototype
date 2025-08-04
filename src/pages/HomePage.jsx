@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { getAnalysisHistory } from '../services/mockApi';
 import LoadingSpinner from '../components/LoadingSpinner';
+import ProgressIndicator from '../components/ProgressIndicator';
 
 const Container = styled.div`
   max-width: 800px;
@@ -151,6 +152,8 @@ function HomePage() {
 
   return (
     <Container>
+      <ProgressIndicator currentStep={1} completedSteps={[]} />
+      
       <WelcomeSection>
         <Title>あなたのスイングを分析しましょう</Title>
         <Subtitle>

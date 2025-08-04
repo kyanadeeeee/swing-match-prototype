@@ -5,6 +5,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { Line } from 'react-chartjs-2';
 import { getClubs, getShafts, simulateVirtualHit } from '../services/mockApi';
 import LoadingSpinner from '../components/LoadingSpinner';
+import ProgressIndicator from '../components/ProgressIndicator';
 
 const Container = styled.div`
   max-width: 1200px;
@@ -313,6 +314,8 @@ function VirtualHitPage() {
 
   return (
     <Container>
+      <ProgressIndicator currentStep={4} completedSteps={[1, 2, 3]} />
+      
       <Header>
         <PageTitle>🏌️ バーチャル試打シミュレーション</PageTitle>
         <BackButton
