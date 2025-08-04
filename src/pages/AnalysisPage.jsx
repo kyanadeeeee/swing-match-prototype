@@ -19,6 +19,7 @@ import ProgressIndicator from '../components/ProgressIndicator';
 import Breadcrumb from '../components/Breadcrumb';
 import FloatingActionButton from '../components/FloatingActionButton';
 import usePageTitle from '../hooks/usePageTitle';
+import { generateRecommendations } from '../services/mockApi';
 
 ChartJS.register(
   CategoryScale,
@@ -137,7 +138,6 @@ const RecommendationSection = styled.section`
   border-radius: ${props => props.theme.borderRadius.lg};
   padding: ${props => props.theme.spacing.xl};
   margin-bottom: ${props => props.theme.spacing.xl};
-  text-align: center;
 `;
 
 const RecommendationTitle = styled.h2`
@@ -145,33 +145,138 @@ const RecommendationTitle = styled.h2`
   color: ${props => props.theme.colors.primaryDark};
   margin-bottom: ${props => props.theme.spacing.lg};
   font-weight: ${props => props.theme.typography.fontWeight.bold};
+  text-align: center;
 `;
 
-const RecommendationContent = styled.div`
+const RecommendationGrid = styled.div`
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
   gap: ${props => props.theme.spacing.lg};
+  margin-bottom: ${props => props.theme.spacing.xl};
+`;
+
+const RecommendationCard = styled(motion.div)`
+  background: ${props => props.theme.colors.surface};
+  border-radius: ${props => props.theme.borderRadius.lg};
+  padding: ${props => props.theme.spacing.lg};
+  box-shadow: ${props => props.theme.shadows.sm};
+  border: 2px solid ${props => props.selected ? props.theme.colors.primary : 'transparent'};
+  cursor: pointer;
+  transition: ${props => props.theme.transitions.normal};
+  position: relative;
+  overflow: hidden;
+
+  &:hover {
+    box-shadow: ${props => props.theme.shadows.md};
+    transform: translateY(-2px);
+  }
+`;
+
+const CardHeader = styled.div`
+  display: flex;
+  align-items: center;
+  margin-bottom: ${props => props.theme.spacing.md};
+`;
+
+const CardIcon = styled.div`
+  font-size: ${props => props.theme.typography.fontSize.xxl};
+  margin-right: ${props => props.theme.spacing.md};
+`;
+
+const RecommendationCardTitle = styled.h3`
+  font-size: ${props => props.theme.typography.fontSize.lg};
+  color: ${props => props.theme.colors.primary};
+  font-weight: ${props => props.theme.typography.fontWeight.bold};
+  margin: 0;
+`;
+
+const CardSubtitle = styled.p`
+  font-size: ${props => props.theme.typography.fontSize.sm};
+  color: ${props => props.theme.colors.text.secondary};
+  margin: 0;
+  margin-top: ${props => props.theme.spacing.xs};
+`;
+
+const CardContent = styled.div`
   margin-bottom: ${props => props.theme.spacing.lg};
 `;
 
-const RecommendationItem = styled.div`
-  background: ${props => props.theme.colors.surface};
-  border-radius: ${props => props.theme.borderRadius.md};
-  padding: ${props => props.theme.spacing.lg};
-  text-align: left;
+const ProductInfo = styled.div`
+  margin-bottom: ${props => props.theme.spacing.md};
 `;
 
-const RecommendationLabel = styled.div`
+const ProductName = styled.div`
+  font-size: ${props => props.theme.typography.fontSize.md};
+  color: ${props => props.theme.colors.primaryDark};
+  font-weight: ${props => props.theme.typography.fontWeight.semibold};
+  margin-bottom: ${props => props.theme.spacing.xs};
+`;
+
+const ProductDetails = styled.div`
   font-size: ${props => props.theme.typography.fontSize.sm};
   color: ${props => props.theme.colors.text.secondary};
-  margin-bottom: ${props => props.theme.spacing.xs};
-  font-weight: ${props => props.theme.typography.fontWeight.medium};
 `;
 
-const RecommendationValue = styled.div`
-  font-size: ${props => props.theme.typography.fontSize.lg};
+const BenefitsList = styled.ul`
+  list-style: none;
+  padding: 0;
+  margin: 0;
+`;
+
+const BenefitItem = styled.li`
+  display: flex;
+  align-items: center;
+  margin-bottom: ${props => props.theme.spacing.xs};
+  font-size: ${props => props.theme.typography.fontSize.sm};
+  color: ${props => props.theme.colors.text.secondary};
+
+  &:before {
+    content: "✓";
+    color: ${props => props.theme.colors.primaryLight};
+    font-weight: bold;
+    margin-right: ${props => props.theme.spacing.sm};
+  }
+`;
+
+const ExpectedImprovement = styled.div`
+  background: ${props => props.theme.colors.background};
+  border-radius: ${props => props.theme.borderRadius.md};
+  padding: ${props => props.theme.spacing.md};
+  margin-top: ${props => props.theme.spacing.md};
+`;
+
+const ImprovementTitle = styled.div`
+  font-size: ${props => props.theme.typography.fontSize.sm};
   color: ${props => props.theme.colors.primary};
   font-weight: ${props => props.theme.typography.fontWeight.semibold};
+  margin-bottom: ${props => props.theme.spacing.xs};
+`;
+
+const ImprovementValue = styled.div`
+  font-size: ${props => props.theme.typography.fontSize.lg};
+  color: ${props => props.theme.colors.primaryLight};
+  font-weight: ${props => props.theme.typography.fontWeight.bold};
+`;
+
+const SelectedBadge = styled.div`
+  position: absolute;
+  top: ${props => props.theme.spacing.md};
+  right: ${props => props.theme.spacing.md};
+  background: ${props => props.theme.colors.primary};
+  color: white;
+  border-radius: ${props => props.theme.borderRadius.full};
+  width: 24px;
+  height: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: ${props => props.theme.typography.fontSize.xs};
+  font-weight: ${props => props.theme.typography.fontWeight.bold};
+`;
+
+const ActionButtonContainer = styled.div`
+  text-align: center;
+  margin-top: ${props => props.theme.spacing.lg};
 `;
 
 function AnalysisPage() {
@@ -180,10 +285,19 @@ function AnalysisPage() {
   const navigate = useNavigate();
   const location = useLocation();
   const [analysisData, setAnalysisData] = useState(null);
+  const [recommendations, setRecommendations] = useState([]);
+  const [selectedRecommendation, setSelectedRecommendation] = useState(null);
 
   useEffect(() => {
     if (location.state?.analysisData) {
-      setAnalysisData(location.state.analysisData);
+      const data = location.state.analysisData;
+      setAnalysisData(data);
+      
+      // 複数の推奨を生成
+      const recs = generateRecommendations(data);
+      setRecommendations(recs);
+      // デフォルトで最初の推奨を選択
+      setSelectedRecommendation(recs[0]);
     } else {
       // IDから履歴データを取得する場合の処理
       navigate('/');
@@ -191,11 +305,27 @@ function AnalysisPage() {
   }, [location, navigate]);
 
   const handleVirtualHit = () => {
-    navigate('/virtual-hit', { state: { analysisData } });
+    navigate('/virtual-hit', { 
+      state: { 
+        analysisData,
+        selectedClub: selectedRecommendation?.clubId,
+        selectedShaft: selectedRecommendation?.shaftId
+      } 
+    });
   };
 
   const handleRental = () => {
-    navigate('/rental', { state: { analysisData } });
+    navigate('/rental', { 
+      state: { 
+        analysisData,
+        selectedClub: selectedRecommendation?.clubId,
+        selectedShaft: selectedRecommendation?.shaftId
+      } 
+    });
+  };
+
+  const handleRecommendationSelect = (recommendation) => {
+    setSelectedRecommendation(recommendation);
   };
 
   const handleBack = () => {
@@ -396,25 +526,78 @@ function AnalysisPage() {
       </ResultsGrid>
 
       <RecommendationSection>
-        <RecommendationTitle>🏆 あなたに最適なクラブ＆シャフト</RecommendationTitle>
-        <RecommendationContent>
-          <RecommendationItem>
-            <RecommendationLabel>推奨クラブ</RecommendationLabel>
-            <RecommendationValue>{analysisData.recommendedClub}</RecommendationValue>
-          </RecommendationItem>
-          <RecommendationItem>
-            <RecommendationLabel>推奨シャフト</RecommendationLabel>
-            <RecommendationValue>{analysisData.recommendedShaft}</RecommendationValue>
-          </RecommendationItem>
-        </RecommendationContent>
-        <ActionButton
-          primary
-          whileHover={{ scale: 1.02 }}
-          whileTap={{ scale: 0.98 }}
-          onClick={handleRental}
-        >
-          🚀 レンタルを申し込む
-        </ActionButton>
+        <RecommendationTitle>🏆 あなたの目標に合わせたクラブ提案</RecommendationTitle>
+        <RecommendationGrid>
+          {recommendations.map((rec, index) => (
+            <RecommendationCard
+              key={rec.id}
+              selected={selectedRecommendation?.id === rec.id}
+              onClick={() => handleRecommendationSelect(rec)}
+              initial={{ opacity: 0, y: 30 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: index * 0.1 }}
+              whileHover={{ scale: 1.02 }}
+              whileTap={{ scale: 0.98 }}
+            >
+              {selectedRecommendation?.id === rec.id && (
+                <SelectedBadge>✓</SelectedBadge>
+              )}
+              
+              <CardHeader>
+                <CardIcon>{rec.icon}</CardIcon>
+                <div>
+                  <RecommendationCardTitle>{rec.title}</RecommendationCardTitle>
+                  <CardSubtitle>{rec.subtitle}</CardSubtitle>
+                </div>
+              </CardHeader>
+              
+              <CardContent>
+                <ProductInfo>
+                  <ProductName>{rec.club}</ProductName>
+                  <ProductDetails>{rec.shaft}</ProductDetails>
+                </ProductInfo>
+                
+                <BenefitsList>
+                  {rec.benefits.map((benefit, idx) => (
+                    <BenefitItem key={idx}>{benefit}</BenefitItem>
+                  ))}
+                </BenefitsList>
+                
+                <ExpectedImprovement>
+                  <ImprovementTitle>{rec.expectedImprovement.title}</ImprovementTitle>
+                  <ImprovementValue>{rec.expectedImprovement.value}</ImprovementValue>
+                </ExpectedImprovement>
+              </CardContent>
+            </RecommendationCard>
+          ))}
+        </RecommendationGrid>
+        
+        {selectedRecommendation && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 0.3 }}
+          >
+            <ActionButtonContainer>
+              <ActionButton
+                primary
+                whileHover={{ scale: 1.02 }}
+                whileTap={{ scale: 0.98 }}
+                onClick={handleRental}
+                style={{ marginRight: '16px' }}
+              >
+                🚀 このクラブをレンタル
+              </ActionButton>
+              <ActionButton
+                whileHover={{ scale: 1.02 }}
+                whileTap={{ scale: 0.98 }}
+                onClick={handleVirtualHit}
+              >
+                🏌️ バーチャル試打で確認
+              </ActionButton>
+            </ActionButtonContainer>
+          </motion.div>
+        )}
       </RecommendationSection>
       
       <FloatingActionButton currentPath="/analysis" />

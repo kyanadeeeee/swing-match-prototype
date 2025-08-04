@@ -152,3 +152,108 @@ export const getClubs = () => {
 export const getShafts = () => {
   return Promise.resolve(shaftOptions);
 };
+
+// 複数の推奨提案を生成
+export const generateRecommendations = (analysisData) => {
+  const { headSpeed, tempo, swingPath } = analysisData;
+  
+  const recommendations = [];
+  
+  // 1. 飛距離重視の提案
+  const distanceClub = clubManufacturers[1].models[0]; // TaylorMade Stealth 2
+  const distanceShaft = shaftOptions.find(s => s.flex === (headSpeed > 42 ? 'S' : 'R') && s.name === 'Graphite Design');
+  recommendations.push({
+    id: 'distance',
+    icon: '🚀',
+    title: '飛距離重視',
+    subtitle: 'より遠くへ飛ばしたい方に',
+    club: `${clubManufacturers[1].name} ${distanceClub.name}`,
+    shaft: `${distanceShaft.name} ${distanceShaft.flex}-Flex (${distanceShaft.weight})`,
+    benefits: [
+      '低スピン設計で飛距離アップ',
+      '軽量シャフトでヘッドスピード向上',
+      '大きなスイートスポット'
+    ],
+    expectedImprovement: {
+      title: '期待される飛距離向上',
+      value: '+15-20ヤード'
+    },
+    reasoning: `あなたのヘッドスピード${headSpeed}m/sに最適化されたドライバーです。`,
+    clubId: distanceClub.id,
+    shaftId: distanceShaft.id
+  });
+  
+  // 2. 正確性重視の提案
+  const accuracyClub = clubManufacturers[0].models[0]; // Titleist TSR3
+  const accuracyShaft = shaftOptions.find(s => s.flex === 'S' && s.name === 'Project X');
+  recommendations.push({
+    id: 'accuracy',
+    icon: '🎯',
+    title: '正確性重視',
+    subtitle: 'フェアウェイキープ率を上げたい方に',
+    club: `${clubManufacturers[0].name} ${accuracyClub.name}`,
+    shaft: `${accuracyShaft.name} ${accuracyShaft.flex}-Flex (${accuracyShaft.weight})`,
+    benefits: [
+      '安定した球筋で方向性向上',
+      'ミッドキックで操作性抜群',
+      '風に負けない中弾道'
+    ],
+    expectedImprovement: {
+      title: 'フェアウェイキープ率',
+      value: '+25%向上'
+    },
+    reasoning: `${swingPath}の傾向に対して、安定性を重視した組み合わせです。`,
+    clubId: accuracyClub.id,
+    shaftId: accuracyShaft.id
+  });
+  
+  // 3. やさしさ重視の提案
+  const forgivingClub = clubManufacturers[2].models[0]; // Callaway Paradym
+  const forgivingShaft = shaftOptions.find(s => s.flex === 'R' && s.kickPoint === 'high');
+  recommendations.push({
+    id: 'forgiving',
+    icon: '🛡️',
+    title: 'やさしさ重視',
+    subtitle: 'ミスヒットに強いクラブをお探しの方に',
+    club: `${clubManufacturers[2].name} ${forgivingClub.name}`,
+    shaft: `${forgivingShaft.name} ${forgivingShaft.flex}-Flex (${forgivingShaft.weight})`,
+    benefits: [
+      '高慣性モーメントでミスに強い',
+      'ハイキックで球が上がりやすい',
+      'スイートエリアが広い'
+    ],
+    expectedImprovement: {
+      title: 'ミスヒット時の飛距離ロス',
+      value: '-30%軽減'
+    },
+    reasoning: `${tempo}なテンポの方に最適な、優しいクラブです。`,
+    clubId: forgivingClub.id,
+    shaftId: forgivingShaft.id
+  });
+  
+  // 4. コントロール重視の提案
+  const controlClub = clubManufacturers[0].models[0]; // Titleist TSR3
+  const controlShaft = shaftOptions.find(s => s.flex === 'X' && s.name === 'KBS Tour');
+  recommendations.push({
+    id: 'control',
+    icon: '🎮',
+    title: 'コントロール重視',
+    subtitle: '球筋を自在に操りたい上級者向け',
+    club: `${clubManufacturers[0].name} ${controlClub.name}`,
+    shaft: `${controlShaft.name} ${controlShaft.flex}-Flex (${controlShaft.weight})`,
+    benefits: [
+      '低キックで球筋をコントロール',
+      '重量感でタイミングが取りやすい',
+      '風に負けない強い球'
+    ],
+    expectedImprovement: {
+      title: '左右のブレ',
+      value: '-40%改善'
+    },
+    reasoning: 'より精密なショットを求める方に最適な上級者仕様です。',
+    clubId: controlClub.id,
+    shaftId: controlShaft.id
+  });
+  
+  return recommendations;
+};
