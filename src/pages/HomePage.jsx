@@ -5,6 +5,8 @@ import { motion } from 'framer-motion';
 import { getAnalysisHistory } from '../services/mockApi';
 import LoadingSpinner from '../components/LoadingSpinner';
 import ProgressIndicator from '../components/ProgressIndicator';
+import Breadcrumb from '../components/Breadcrumb';
+import FloatingActionButton from '../components/FloatingActionButton';
 import usePageTitle from '../hooks/usePageTitle';
 
 const Container = styled.div`
@@ -155,6 +157,7 @@ function HomePage() {
 
   return (
     <Container>
+      <Breadcrumb currentPath="/" />
       <ProgressIndicator currentStep={1} completedSteps={[]} />
       
       <WelcomeSection>
@@ -209,6 +212,8 @@ function HomePage() {
           </EmptyState>
         )}
       </HistorySection>
+      
+      <FloatingActionButton currentPath="/" />
     </Container>
   );
 }

@@ -6,6 +6,8 @@ import { Line } from 'react-chartjs-2';
 import { getClubs, getShafts, simulateVirtualHit } from '../services/mockApi';
 import LoadingSpinner from '../components/LoadingSpinner';
 import ProgressIndicator from '../components/ProgressIndicator';
+import Breadcrumb from '../components/Breadcrumb';
+import FloatingActionButton from '../components/FloatingActionButton';
 import usePageTitle from '../hooks/usePageTitle';
 
 const Container = styled.div`
@@ -317,6 +319,7 @@ function VirtualHitPage() {
 
   return (
     <Container>
+      <Breadcrumb currentPath="/virtual-hit" />
       <ProgressIndicator currentStep={4} completedSteps={[1, 2, 3]} />
       
       <Header>
@@ -464,6 +467,8 @@ function VirtualHitPage() {
           )}
         </SimulationPanel>
       </ContentGrid>
+      
+      <FloatingActionButton currentPath="/virtual-hit" />
     </Container>
   );
 }

@@ -5,6 +5,8 @@ import { motion } from 'framer-motion';
 import { getClubs, getShafts } from '../services/mockApi';
 import LoadingSpinner from '../components/LoadingSpinner';
 import ProgressIndicator from '../components/ProgressIndicator';
+import Breadcrumb from '../components/Breadcrumb';
+import FloatingActionButton from '../components/FloatingActionButton';
 import usePageTitle from '../hooks/usePageTitle';
 
 const Container = styled.div`
@@ -334,6 +336,7 @@ function RentalPage() {
   if (orderSubmitted) {
     return (
       <Container>
+        <Breadcrumb currentPath="/rental" />
         <SuccessMessage
           initial={{ opacity: 0, scale: 0.9 }}
           animate={{ opacity: 1, scale: 1 }}
@@ -354,6 +357,8 @@ function RentalPage() {
             新しいスイング分析を始める
           </SubmitButton>
         </SuccessMessage>
+        
+        <FloatingActionButton currentPath="/rental" />
       </Container>
     );
   }
@@ -373,6 +378,7 @@ function RentalPage() {
 
   return (
     <Container>
+      <Breadcrumb currentPath="/rental" />
       <ProgressIndicator currentStep={5} completedSteps={[1, 2, 3, 4]} />
       
       <Header>
@@ -528,6 +534,8 @@ function RentalPage() {
           </SubmitButton>
         </form>
       </FormSection>
+      
+      <FloatingActionButton currentPath="/rental" />
     </Container>
   );
 }

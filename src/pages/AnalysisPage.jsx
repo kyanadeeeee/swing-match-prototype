@@ -16,6 +16,8 @@ import {
 } from 'chart.js';
 import { Line, Bar, Radar } from 'react-chartjs-2';
 import ProgressIndicator from '../components/ProgressIndicator';
+import Breadcrumb from '../components/Breadcrumb';
+import FloatingActionButton from '../components/FloatingActionButton';
 import usePageTitle from '../hooks/usePageTitle';
 
 ChartJS.register(
@@ -269,6 +271,7 @@ function AnalysisPage() {
 
   return (
     <Container>
+      <Breadcrumb currentPath="/analysis" />
       <ProgressIndicator currentStep={3} completedSteps={[1, 2]} />
       
       <Header>
@@ -413,6 +416,8 @@ function AnalysisPage() {
           🚀 レンタルを申し込む
         </ActionButton>
       </RecommendationSection>
+      
+      <FloatingActionButton currentPath="/analysis" />
     </Container>
   );
 }

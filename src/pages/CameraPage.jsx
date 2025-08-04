@@ -5,6 +5,8 @@ import { motion } from 'framer-motion';
 import { analyzeSwing } from '../services/mockApi';
 import LoadingSpinner from '../components/LoadingSpinner';
 import ProgressIndicator from '../components/ProgressIndicator';
+import Breadcrumb from '../components/Breadcrumb';
+import FloatingActionButton from '../components/FloatingActionButton';
 import usePageTitle from '../hooks/usePageTitle';
 
 const Container = styled.div`
@@ -238,6 +240,7 @@ function CameraPage() {
 
   return (
     <Container>
+      <Breadcrumb currentPath="/camera" />
       <ProgressIndicator currentStep={2} completedSteps={[1]} />
       
       <BackButton
@@ -306,6 +309,11 @@ function CameraPage() {
           </ActionButton>
         </div>
       </CameraSection>
+      
+      <FloatingActionButton 
+        currentPath="/camera" 
+        onTestAction={handleTestAnalyze}
+      />
     </Container>
   );
 }
