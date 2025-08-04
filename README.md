@@ -1,12 +1,43 @@
-# React + Vite
+# Swing Match Prototype ⛳
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+ゴルフスイング分析アプリ「Swing Match」のプロトタイプです。AI技術でスイングを分析し、最適なクラブとシャフトの組み合わせを提案します。
 
-Currently, two official plugins are available:
+## 🌟 主要機能
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+- **AIスイング分析**: 動画からヘッドスピード、テンポ、スイング軌道を分析
+- **バーチャル試打**: 推奨クラブでのシミュレーション機能
+- **クラブレンタル**: 分析結果に基づくクラブレンタル申し込み
+- **分析履歴**: 過去の分析結果の確認
 
-## Expanding the ESLint configuration
+## 🚀 デモ機能
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+動画ファイルがない場合でも「🧪 テスト用サンプルで分析」ボタンで全機能をテストできます。
+
+## 🛠️ 技術スタック
+
+- **React 18** + **Vite**
+- **React Router** (ナビゲーション)
+- **Styled Components** (スタイリング)
+- **Framer Motion** (アニメーション)
+- **Chart.js** (データ可視化)
+
+## 📱 画面構成
+
+1. **トップ画面** - スイング分析開始、過去の履歴表示
+2. **撮影画面** - 動画撮影・アップロード、テスト分析
+3. **分析結果画面** - 詳細分析結果とグラフ表示
+4. **バーチャル試打画面** - クラブ選択とシミュレーション
+5. **レンタル申し込み画面** - クラブレンタルの注文フォーム
+
+## 🎨 デザインコンセプト
+
+ゴルフコースを連想させる緑色を基調とした、直感的で洗練されたUI/UXデザイン。
+
+## 🏃‍♂️ ローカル実行
+
+```bash
+npm install
+npm run dev
+```
+
+http://localhost:5174 でアクセス可能です。
